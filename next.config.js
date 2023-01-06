@@ -9,6 +9,13 @@ const nextConfig = {
                 port: '',
                 pathname: '/t/p/original/**',
             },
+
+            {
+                protocol: 'https',
+                hostname: 'rb.gy',
+                port: '',
+                pathname: '/**',
+            },
         ],
     },
 }
