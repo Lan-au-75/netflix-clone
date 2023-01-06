@@ -16,8 +16,10 @@ import { modalState, movieState } from '../atoms/modalAtom'
 
 function Modal() {
     const [showModal, setShowModal] = useRecoilState(modalState)
-    const [movie, setMovie] = useRecoilState(movieState)
+    const [movie, _] = useRecoilState(movieState)
     const [trailer, setTrailer] = useState<string>('')
+    const [fallBack, setFallBack] = useState<string>('')
+
     const [genres, setGenres] = useState<Genre[]>([])
     const [muted, setMuted] = useState(true)
 
@@ -37,14 +39,20 @@ function Modal() {
                 .then((response) => response.json())
                 .catch((error) => error.message)
 
-            console.log({ data })
-
             if (data?.videos) {
                 const index = data?.videos?.results.findIndex(
                     (element: Element) => element.type === 'Trailer'
                 )
 
                 setTrailer(data?.videos?.results[index]?.key)
+
+                //fallBack
+
+                const indexFallBack = data?.videos?.results.findIndex(
+                    (element: Element) => element.type === 'Teaser'
+                )
+
+                setFallBack(data?.videos?.results[indexFallBack]?.key)
             }
 
             if (data?.genres) {
@@ -78,6 +86,7 @@ function Modal() {
                         style={{ position: 'absolute', top: '0', left: '0' }}
                         playing
                         muted={muted}
+                        onError={() => setTrailer(fallBack)}
                     />
                     <div className="absolute bottom-10 flex w-full items-center justify-between px-10">
                         <div className="flex space-x-2">
